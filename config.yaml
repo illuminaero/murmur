@@ -1,0 +1,85 @@
+# Swarm Flocking Animation Configuration
+# Based on Vásárhelyi et al. 2018 Optimized Flocking Model
+
+# Volume scale factor: 1.5x volume means distances scale by 1.5^(1/3) ≈ 1.145
+volume_scale_factor: 1.5  # Applied as volume_scale_factor^(1/3) to distances
+
+# ============================================================================
+# FLOCKING PARAMETERS (Vásárhelyi et al. 2018)
+# ============================================================================
+flocking:
+  # === HARD COLLISION PREVENTION ===
+  # This is the ABSOLUTE minimum distance - never violated
+  min_distance: 1.0  # Hard minimum distance (m) - NEVER violated
+
+  # Repulsion (collision avoidance) - will be scaled by volume_scale
+  r_rep: 3.0         # Repulsion range (soft zone) in meters
+  p_rep: 1.0         # Repulsion gain (1/s)
+
+  # Emergency repulsion kicks in below this distance with exponential force
+  r_emergency: 1.5   # Emergency zone (m) - very strong repulsion
+
+  # Friction/Alignment (velocity matching) - will be scaled by volume_scale
+  r_frict: 6.0       # Friction range in meters
+  c_frict: 0.5       # Friction coefficient
+  v_slack: 0.5       # Velocity slack (m/s)
+
+  # Cohesion (group attraction) - will be scaled by volume_scale
+  r_cohesion: 15.0   # Cohesion range in meters
+  p_cohesion: 0.5    # Cohesion gain
+
+  # Speed limits (NOT scaled - these are physical limits)
+  v_flock: 2.5           # Preferred flocking speed (m/s)
+  v_max_horizontal: 3.7  # Maximum horizontal (XY) speed (m/s)
+  v_max_vertical: 1.2    # Maximum vertical (Z) speed (m/s) - more limited
+
+  # Communication - will be scaled by volume_scale
+  r_comm: 50.0       # Communication range in meters
+  max_neighbors: 10  # Max neighbors to consider
+
+  # Arena bounds (soft constraint) - will be scaled by volume_scale
+  arena_size: 30.0   # Arena radius in meters
+  wall_repulsion: 1.0  # Wall avoidance strength
+
+# ============================================================================
+# BREATHING / PULSING BEHAVIOR
+# ============================================================================
+breathing:
+  enable: true
+  period: 200          # Frames per full cycle (8 sec at 25fps)
+  strength: 2.5        # How strongly to push outward
+  duty_cycle: 0.35     # 35% push out, 65% relax/reform
+  smoothness: 0.3      # Smooth transition (0=sharp, 1=very smooth)
+
+# ============================================================================
+# ANTI-CONVERGENCE OPTIONS
+# ============================================================================
+turbulence:
+  enable: true
+  strength: 1.5        # Base strength of turbulence
+  frequency: 0.003     # How fast turbulence oscillates
+
+random_kicks:
+  enable: true
+  probability: 0.005   # Chance per drone per frame
+  strength: 1.5        # Magnitude of velocity kick
+
+# ============================================================================
+# ANIMATION SETTINGS
+# ============================================================================
+animation:
+  num_drones: 100
+  fps: 25
+  start_frame: 1000
+  end_frame: 20000
+
+# ============================================================================
+# DRONE APPEARANCE
+# ============================================================================
+drone:
+  size: 0.15           # Drone sphere radius
+  use_empties: false   # Use empties instead of mesh spheres
+
+# Spawn radius - will be scaled by volume_scale
+spawn_radius: 15.0     # Initial spawn radius in meters
+
