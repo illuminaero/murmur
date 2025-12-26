@@ -2,7 +2,8 @@
 
 A swarm flocking animation system for Blender based on the Vásárhelyi et al. 2018 optimized flocking model.
 
-<video src="static/sample.mp4" controls width="100%"></video>
+https://github.com/user-attachments/assets/5a9eec63-972c-48b6-b54c-4bcb24765280
+
 
 ## ⚠️ Disclaimer
 
