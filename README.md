@@ -1,6 +1,6 @@
 # Murmur
 
-A swarm flocking animation system for Blender based on the Vásárhelyi et al. 2018 optimized flocking model.
+A swarm flocking simulation for Blender and Skybrush Studio, based on the Vásárhelyi et al. 2018 optimized flocking model.
 
 https://github.com/user-attachments/assets/5a9eec63-972c-48b6-b54c-4bcb24765280
 
@@ -110,10 +110,6 @@ Find Blender's bundled Python and run pip directly:
 > ```bash
 > /path/to/blender-4.3.2-linux-x64/4.3/python/bin/python3.11 -m pip install pyyaml
 > ```
-
-#### Note on bmesh
-
-The `bmesh` module is included with Blender by default—you don't need to install it separately. It's only available within Blender's Python environment.
 
 ### 2. Add Project Files
 
