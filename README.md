@@ -4,6 +4,7 @@ A swarm flocking simulation for Blender and Skybrush Studio, based on the Vásá
 
 https://github.com/user-attachments/assets/5a9eec63-972c-48b6-b54c-4bcb24765280
 
+https://github.com/user-attachments/assets/29256ae6-42db-45dd-8456-7b960c32d0eb
 
 ## ⚠️ Disclaimer
 
