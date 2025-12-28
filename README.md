@@ -69,53 +69,13 @@ The system uses multiple safeguards to prevent collisions:
 
 ## Installation
 
-### 1. Install Dependencies
+### 1. Add Project Files
 
-This project requires PyYAML to be installed in Blender's Python environment. Blender ships with its own Python installation, so you need to install packages there (not your system Python).
+Place `murmur.py` and `config.toml` in the same directory (or in the same directory as your `.blend` file).
 
-#### Option A: From Blender's Python Console
+No external dependencies are required—the script uses Python's built-in `tomllib` module (Python 3.11+, included with Blender 4.0+).
 
-Open Blender, go to the **Scripting** workspace, and run in the Python Console:
-
-```python
-import subprocess
-import sys
-subprocess.check_call([sys.executable, "-m", "pip", "install", "pyyaml"])
-```
-
-#### Option B: From Terminal/Command Line
-
-Find Blender's bundled Python and run pip directly:
-
-**macOS:**
-```bash
-"/Applications/Blender.app/Contents/Resources/4.3/python/bin/python3.11" -m pip install pyyaml
-```
-
-> Adjust the path for your Blender version, e.g., `Blender 4.3.2.app` and `4.3` → `4.2`, `python3.11` → `python3.10`, etc.
-
-**Windows:**
-```cmd
-"C:\Program Files\Blender Foundation\Blender 4.3\4.3\python\bin\python.exe" -m pip install pyyaml
-```
-
-> Adjust the path for your Blender version and installation location.
-
-**Linux:**
-```bash
-/usr/share/blender/4.3/python/bin/python3.11 -m pip install pyyaml
-```
-
-> The exact path depends on how Blender was installed. For downloaded/extracted versions:
-> ```bash
-> /path/to/blender-4.3.2-linux-x64/4.3/python/bin/python3.11 -m pip install pyyaml
-> ```
-
-### 2. Add Project Files
-
-Place `murmur.py` and `config.yaml` in the same directory.
-
-### 3. Run the Script
+### 2. Run the Script
 
 Open `murmur.py` in Blender's Text Editor and run the script (Alt+P or the Run button).
 
@@ -153,12 +113,12 @@ The `util/` directory contains optional utilities for executing scripts in Blend
 
 ## Configuration
 
-All parameters are configured in `config.yaml`. The configuration is organized into sections:
+All parameters are configured in `config.toml`. The configuration is organized into sections:
 
 ### Volume Scaling
 
-```yaml
-volume_scale_factor: 1.5
+```toml
+volume_scale_factor = 1.5
 ```
 
 Scales all distance-based parameters to adjust the overall swarm volume. A factor of 1.5 means 1.5× the volume, which translates to distances being multiplied by 1.5^(1/3) ≈ 1.145.
@@ -167,24 +127,24 @@ Scales all distance-based parameters to adjust the overall swarm volume. A facto
 
 ### Flocking Parameters
 
-```yaml
-flocking:
-  min_distance: 1.0      # Hard minimum distance (meters) - NEVER violated
-  r_rep: 3.0             # Repulsion range (soft zone)
-  p_rep: 1.0             # Repulsion force gain
-  r_emergency: 1.5       # Emergency zone with exponential repulsion
-  r_frict: 6.0           # Velocity alignment range
-  c_frict: 0.5           # Friction/alignment coefficient
-  v_slack: 0.5           # Velocity difference threshold before alignment kicks in
-  r_cohesion: 15.0       # Cohesion attraction range
-  p_cohesion: 0.5        # Cohesion force gain
-  v_flock: 2.5           # Preferred flocking speed (m/s)
-  v_max_horizontal: 3.7  # Maximum horizontal (XY) speed (m/s)
-  v_max_vertical: 1.2    # Maximum vertical (Z) speed (m/s)
-  r_comm: 50.0           # Communication/perception range
-  max_neighbors: 10      # Maximum neighbors each drone considers
-  arena_size: 30.0       # Soft boundary radius
-  wall_repulsion: 1.0    # Boundary avoidance strength
+```toml
+[flocking]
+min_distance = 1.0      # Hard minimum distance (meters) - NEVER violated
+r_rep = 3.0             # Repulsion range (soft zone)
+p_rep = 1.0             # Repulsion force gain
+r_emergency = 1.5       # Emergency zone with exponential repulsion
+r_frict = 6.0           # Velocity alignment range
+c_frict = 0.5           # Friction/alignment coefficient
+v_slack = 0.5           # Velocity difference threshold before alignment kicks in
+r_cohesion = 15.0       # Cohesion attraction range
+p_cohesion = 0.5        # Cohesion force gain
+v_flock = 2.5           # Preferred flocking speed (m/s)
+v_max_horizontal = 3.7  # Maximum horizontal (XY) speed (m/s)
+v_max_vertical = 1.2    # Maximum vertical (Z) speed (m/s)
+r_comm = 50.0           # Communication/perception range
+max_neighbors = 10      # Maximum neighbors each drone considers
+arena_size = 30.0       # Soft boundary radius
+wall_repulsion = 1.0    # Boundary avoidance strength
 ```
 
 | Parameter | Description | Scaled by Volume |
@@ -210,13 +170,13 @@ flocking:
 
 ### Breathing (Split/Merge Behavior)
 
-```yaml
-breathing:
-  enable: true
-  period: 200        # Frames per full cycle
-  strength: 2.5      # Outward push strength
-  duty_cycle: 0.35   # Fraction of cycle spent pushing out
-  smoothness: 0.3    # Transition smoothness (0=sharp, 1=very smooth)
+```toml
+[breathing]
+enable = true
+period = 200        # Frames per full cycle
+strength = 2.5      # Outward push strength
+duty_cycle = 0.35   # Fraction of cycle spent pushing out
+smoothness = 0.3    # Transition smoothness (0=sharp, 1=very smooth)
 ```
 
 | Parameter | Description |
@@ -231,11 +191,11 @@ breathing:
 
 ### Turbulence
 
-```yaml
-turbulence:
-  enable: true
-  strength: 1.5      # Base turbulence magnitude
-  frequency: 0.003   # Oscillation frequency
+```toml
+[turbulence]
+enable = true
+strength = 1.5      # Base turbulence magnitude
+frequency = 0.003   # Oscillation frequency
 ```
 
 | Parameter | Description |
@@ -248,11 +208,11 @@ turbulence:
 
 ### Random Kicks
 
-```yaml
-random_kicks:
-  enable: true
-  probability: 0.005  # Chance per drone per frame
-  strength: 1.5       # Kick magnitude
+```toml
+[random_kicks]
+enable = true
+probability = 0.005  # Chance per drone per frame
+strength = 1.5       # Kick magnitude
 ```
 
 | Parameter | Description |
@@ -265,12 +225,12 @@ random_kicks:
 
 ### Animation Settings
 
-```yaml
-animation:
-  num_drones: 100
-  fps: 25
-  start_frame: 1000
-  end_frame: 20000
+```toml
+[animation]
+num_drones = 100
+fps = 25
+start_frame = 1000
+end_frame = 20000
 ```
 
 | Parameter | Description |
@@ -284,10 +244,10 @@ animation:
 
 ### Drone Appearance
 
-```yaml
-drone:
-  size: 0.15         # Sphere radius for mesh drones
-  use_empties: false # Use empties instead of mesh spheres
+```toml
+[drone]
+size = 0.15         # Sphere radius for mesh drones
+use_empties = false # Use empties instead of mesh spheres
 ```
 
 | Parameter | Description |
@@ -299,8 +259,8 @@ drone:
 
 ### Spawn Settings
 
-```yaml
-spawn_radius: 15.0   # Initial spawn area radius
+```toml
+spawn_radius = 15.0   # Initial spawn area radius
 ```
 
 | Parameter | Description | Scaled by Volume |

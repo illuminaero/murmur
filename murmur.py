@@ -36,52 +36,43 @@ import mathutils
 import random
 import time
 import os
-import sys
-
-# Add user site-packages to path for pip packages installed with --user
-# This is needed because Blender's Python doesn't check ~/.local by default
-import site
-user_site = site.getusersitepackages()
-if user_site not in sys.path:
-    sys.path.append(user_site)
-
-import yaml
+import tomllib
 
 # ============================================================================
-# LOAD CONFIGURATION FROM YAML
+# LOAD CONFIGURATION FROM TOML
 # ============================================================================
 
 def load_config():
-    """Load configuration from config.yaml file"""
-    # Try multiple locations to find config.yaml
+    """Load configuration from config.toml file"""
+    # Try multiple locations to find config.toml
     search_paths = []
     
     # 1. Try relative to script file (if running as a file)
     try:
         script_dir = os.path.dirname(os.path.realpath(__file__))
-        search_paths.append(os.path.join(script_dir, "config.yaml"))
+        search_paths.append(os.path.join(script_dir, "config.toml"))
     except NameError:
         pass  # __file__ not defined (running via exec/remote)
     
     # 2. Try relative to the current blend file
     if bpy.data.filepath:
         blend_dir = os.path.dirname(bpy.data.filepath)
-        search_paths.append(os.path.join(blend_dir, "config.yaml"))
+        search_paths.append(os.path.join(blend_dir, "config.toml"))
     
     # 3. Try current working directory
-    search_paths.append(os.path.join(os.getcwd(), "config.yaml"))
+    search_paths.append(os.path.join(os.getcwd(), "config.toml"))
     
     # 4. Try common project locations
-    search_paths.append(os.path.expanduser("~/src/murmur/config.yaml"))
+    search_paths.append(os.path.expanduser("~/src/murmur/config.toml"))
     
     for config_path in search_paths:
         if os.path.exists(config_path):
             print(f"Loading config from: {config_path}")
-            with open(config_path, 'r') as f:
-                return yaml.safe_load(f)
+            with open(config_path, 'rb') as f:
+                return tomllib.load(f)
     
     raise FileNotFoundError(
-        f"config.yaml not found. Searched:\n" + 
+        f"config.toml not found. Searched:\n" + 
         "\n".join(f"  - {p}" for p in search_paths)
     )
 
