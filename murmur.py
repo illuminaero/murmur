@@ -654,16 +654,25 @@ for drone in drones:
     obj = drone['object']
     if not obj.animation_data:
         obj.animation_data_create()
-    
+
     action = bpy.data.actions.new(name=f"Action_{obj.name}")
     obj.animation_data.action = action
-    
+
+    # Slotted Actions (Blender 4.4+; required in 5.x — legacy action.fcurves removed)
+    slot = action.slots.new(id_type='OBJECT', name=obj.name)
+    obj.animation_data.action_slot = slot
+    layer = action.layers.new(name="Layer")
+    strip = layer.strips.new(type='KEYFRAME')
+    channelbag = strip.channelbag(slot, ensure=True)
+
     # Pre-create FCurves for X, Y, Z location
+    fcurves = []
     for i in range(3):
-        fcurve = action.fcurves.new(data_path="location", index=i)
+        fcurve = channelbag.fcurves.new(data_path="location", index=i)
         fcurve.keyframe_points.add(total_frames)
-    
-    drone['fcurves'] = [action.fcurves[i] for i in range(3)]
+        fcurves.append(fcurve)
+
+    drone['fcurves'] = fcurves
 
 # ============================================================================
 # ANIMATE SWARM

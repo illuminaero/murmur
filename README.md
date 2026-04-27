@@ -74,7 +74,7 @@ The system uses multiple safeguards to prevent collisions:
 
 Place `murmur.py` and `config.toml` in the same directory (or in the same directory as your `.blend` file).
 
-No external dependencies are required—the script uses Python's built-in `tomllib` module (Python 3.11+, included with Blender 4.0+).
+**Requires Blender 4.4 or later.** The scripts use the slotted Actions API (`action.slots` / `action.layers` / `channelbag.fcurves`) introduced in Blender 4.4 — earlier versions (including 4.3.2) will fail with `AttributeError: 'Action' object has no attribute 'slots'` or similar. No external Python dependencies are required.
 
 ### 2. Run the Script
 
@@ -289,6 +289,29 @@ To use the generated animation with [Skybrush Studio](https://skybrush.io/) for 
    - Use Skybrush's validation tools to check for any trajectory or speed limit violations
 
 > **Important:** Always validate the generated trajectories against your specific drone hardware capabilities before exporting for a real show. See the disclaimer at the top of this document.
+
+### Distance-based LED Coloring
+
+The `colorizer.py` script adds LED colors to drones based on how close they are to their nearest neighbor. This provides a visual indication of drone spacing during the show.
+
+**Run after the formation is mapped:**
+
+```bash
+python3 util/send_to_blender.py colorizer.py
+```
+
+Or open `colorizer.py` in Blender's Text Editor and run it.
+
+**Color mapping (configurable in the script):**
+| Distance | Color |
+|----------|-------|
+| < 1m | Red (danger) |
+| 2-3m | Orange |
+| 4-5m | Yellow |
+| 6-8m | Green |
+| > 10m | Cyan (safe) |
+
+The script creates emission materials with keyframed colors that Skybrush can read for LED programming.
 
 ## Usage Tips
 
